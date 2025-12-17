@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MATEMONÓPOLIO - Gamificação e Investigação Matemática</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Reset e configurações gerais */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --math-color: #8e44ad;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        /* Cabeçalho e navegação */
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1.5rem 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-icon {
+            font-size: 2.5rem;
+            color: var(--secondary-color);
+        }
+
+        .logo-text h1 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+        }
+
+        .logo-text p {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            padding: 5px 0;
+            position: relative;
+        }
+
+        nav a:hover {
+            color: var(--secondary-color);
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--secondary-color);
+            transition: width 0.3s;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            font-size: 1.5rem;
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+        }
+
+        /* Seção hero */
+        .hero {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 5rem 0;
+            text-align: center;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h2 {
+            font-size: 2.8rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background-color: var(--accent-color);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .cta-button:hover {
+            background-color: #c0392b;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+        }
+
+        /* Seções comuns */
+        section {
+            padding: 5rem 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            display: inline-block;
+            padding-bottom: 15px;
+        }
+
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background-color: var(--secondary-color);
+            border-radius: 2px;
+        }
+
+        /* Sobre o jogo */
+        .game-description {
+            display: flex;
+            align-items: center;
+            gap: 50px;
+            margin-bottom: 4rem;
+        }
+
+        .game-description.reverse {
+            flex-direction: row-reverse;
+        }
+
+        .game-text {
+            flex: 1;
+        }
+
+        .game-text h3 {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            margin-bottom: 1.2rem;
+        }
+
+        .game-image {
+            flex: 1;
+            text-align: center;
+        }
+
+        .game-image img {
+            max-width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.5s;
+        }
+
+        .game-image img:hover {
+            transform: scale(1.03);
+        }
+
+        /* Competências */
+        .competence-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 3rem;
+        }
+
+        .competence-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .competence-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .competence-icon {
+            font-size: 2.5rem;
+            color: var(--math-color);
+            margin-bottom: 20px;
+        }
+
+        .competence-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        /* Componentes do jogo */
+        .components {
+            background-color: #f0f4f8;
+        }
+
+        .components-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 3rem;
+        }
+
+        .component-card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s;
+        }
+
+        .component-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .component-img {
+            height: 180px;
+            background-color: var(--light-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 3rem;
+            color: var(--secondary-color);
+        }
+
+        .component-info {
+            padding: 25px;
+        }
+
+        .component-info h3 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        /* Download */
+        .download-options {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .download-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 40px 30px;
+            text-align: center;
+            width: 280px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s;
+        }
+
+        .download-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .download-icon {
+            font-size: 3rem;
+            color: var(--secondary-color);
+            margin-bottom: 20px;
+        }
+
+        .download-btn {
+            display: inline-block;
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+        }
+
+        .download-btn:hover {
+            background-color: #2980b9;
+        }
+
+        /* Contato */
+        .contact {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .contact .section-title h2 {
+            color: white;
+        }
+
+        .contact-content {
+            display: flex;
+            gap: 50px;
+            margin-top: 3rem;
+        }
+
+        .contact-info {
+            flex: 1;
+        }
+
+        .contact-form {
+            flex: 1;
+        }
+
+        .contact-info h3 {
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        .contact-info p {
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            gap: 15px;
+        }
+
+        .contact-item i {
+            font-size: 1.2rem;
+            color: var(--secondary-color);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            font-size: 1rem;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+        }
+
+        textarea.form-control {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .submit-btn:hover {
+            background-color: #c0392b;
+        }
+
+        /* Rodapé */
+        footer {
+            background-color: #1a252f;
+            color: white;
+            padding: 3rem 0 1.5rem;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .footer-column {
+            flex: 1;
+            min-width: 250px;
+            margin-bottom: 30px;
+        }
+
+        .footer-column h3 {
+            color: var(--secondary-color);
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: #ddd;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--secondary-color);
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-icons a {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: white;
+            font-size: 1.2rem;
+            transition: background-color 0.3s;
+        }
+
+        .social-icons a:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+
+        /* Responsividade */
+        @media (max-width: 992px) {
+            .game-description, .contact-content {
+                flex-direction: column;
+            }
+            
+            .hero h2 {
+                font-size: 2.3rem;
+            }
+            
+            .section-title h2 {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 20px;
+            }
+            
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .hero {
+                padding: 3rem 0;
+            }
+            
+            .hero h2 {
+                font-size: 1.8rem;
+            }
+            
+            section {
+                padding: 3rem 0;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+                position: absolute;
+                top: 1.5rem;
+                right: 1rem;
+            }
+            
+            nav {
+                width: 100%;
+                display: none;
+            }
+            
+            nav.active {
+                display: block;
+                margin-top: 20px;
+            }
+            
+            nav ul {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Cabeçalho com navegação -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-dice-d20"></i>
+                    </div>
+                    <div class="logo-text">
+                        <h1>MATEMONÓPOLIO</h1>
+                        <p>Gamificação e Investigação Matemática</p>
+                    </div>
+                </div>
+                
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                
+                <nav id="mainNav">
+                    <ul>
+                        <li><a href="#home">Início</a></li>
+                        <li><a href="#about">Sobre o Jogo</a></li>
+                        <li><a href="#competence">Competência 5</a></li>
+                        <li><a href="#components">Componentes</a></li>
+                        <li><a href="#download">Download</a></li>
+                        <li><a href="#contact">Contato</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Seção Hero -->
+    <section class="hero" id="home">
+        <div class="container">
+            <div class="hero-content">
+                <h2>Transformando a Aprendizagem de Matemática através da Gamificação</h2>
+                <p>Um jogo de tabuleiro inovador que desenvolve habilidades de investigação matemática alinhadas à BNCC, promovendo a conjectura, argumentação e generalização no Ensino Médio.</p>
+                <a href="#download" class="cta-button">BAIXAR JOGO COMPLETO</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sobre o jogo -->
+    <section id="about">
+        <div class="container">
+            <div class="section-title">
+                <h2>Sobre o Jogo</h2>
+            </div>
+            
+            <div class="game-description">
+                <div class="game-text">
+                    <h3>O que é o MATEMONÓPOLIO?</h3>
+                    <p>O MATEMONÓPOLIO é um jogo de tabuleiro educacional desenvolvido como parte de um Trabalho de Conclusão de Curso (TCC) em Licenciatura em Matemática. Inspirado em jogos de estratégia e negociação, ele foi projetado para transformar o aprendizado de matemática em uma experiência lúdica e investigativa.</p>
+                    <p>O jogo coloca os alunos no papel de "investigadores-magnatas" que devem resolver desafios matemáticos para adquirir propriedades, construir impérios e desenvolver estratégias vencedoras.</p>
+                </div>
+                <div class="game-image">
+                    <img src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="Tabuleiro do MATEMONÓPOLIO">
+                </div>
+            </div>
+            
+            <div class="game-description reverse">
+                <div class="game-text">
+                    <h3>Objetivos Educacionais</h3>
+                    <p>O jogo foi desenvolvido com o propósito de operacionalizar a Competência 5 da BNCC, que foca em "Investigar e estabelecer conjecturas a respeito de diferentes conceitos e propriedades matemáticas".</p>
+                    <p>Através de mecânicas de jogo cuidadosamente planejadas, os alunos são incentivados a:</p>
+                    <ul style="padding-left: 20px; margin-top: 10px;">
+                        <li>Identificar padrões em sequências numéricas e geométricas</li>
+                        <li>Formular e testar conjecturas</li>
+                        <li>Generalizar resultados matemáticos</li>
+                        <li>Argumentar matematicamente para validar suas descobertas</li>
+                        <li>Resolver problemas em contextos estratégicos</li>
+                    </ul>
+                </div>
+                <div class="game-image">
+                    <img src="https://images.unsplash.com/photo-1596495577886-d920f1fb7238?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1174&q=80" alt="Jogadores interagindo com o MATEMONÓPOLIO">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Competência 5 da BNCC -->
+    <section id="competence" style="background-color: #f0f4f8;">
+        <div class="container">
+            <div class="section-title">
+                <h2>Competência 5 da BNCC</h2>
+            </div>
+            
+            <div class="game-text" style="text-align: center; max-width: 800px; margin: 0 auto 3rem;">
+                <h3>Investigar e estabelecer conjecturas</h3>
+                <p>A Competência 5 da BNCC para Matemática no Ensino Médio enfatiza a investigação como processo central para a construção do conhecimento matemático. O MATEMONÓPOLIO foi desenvolvido especificamente para promover essa competência através de mecânicas de jogo que exigem:</p>
+            </div>
+            
+            <div class="competence-grid">
+                <div class="competence-card">
+                    <div class="competence-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h3>Investigação</h3>
+                    <p>Os jogadores investigam padrões, relações e propriedades matemáticas através de desafios estruturados, utilizando diferentes estratégias e recursos.</p>
+                </div>
+                
+                <div class="competence-card">
+                    <div class="competence-icon">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <h3>Conjectura</h3>
+                    <p>Formular hipóteses matemáticas com base em observações e padrões identificados durante o jogo, desenvolvendo o raciocínio hipotético-dedutivo.</p>
+                </div>
+                
+                <div class="competence-card">
+                    <div class="competence-icon">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <h3>Argumentação</h3>
+                    <p>Validar ou refutar conjecturas através de argumentos matemáticos, promovendo a discussão e o debate fundamentado entre os jogadores.</p>
+                </div>
+                
+                <div class="competence-card">
+                    <div class="competence-icon">
+                        <i class="fas fa-project-diagram"></i>
+                    </div>
+                    <h3>Generalização</h3>
+                    <p>Extrair regras gerais a partir de casos específicos encontrados durante o jogo, desenvolvendo a capacidade de abstração e modelagem matemática.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Componentes do jogo -->
+    <section id="components" class="components">
+        <div class="container">
+            <div class="section-title">
+                <h2>Componentes do Jogo</h2>
+            </div>
+            
+            <div class="components-grid">
+                <div class="component-card">
+                    <div class="component-img">
+                        <i class="fas fa-chess-board"></i>
+                    </div>
+                    <div class="component-info">
+                        <h3>Tabuleiro</h3>
+                        <p>Tabuleiro com trilha circular dividida em 40 casas, representando diferentes regiões matemáticas (Álgebra, Geometria, Análise).</p>
+                    </div>
+                </div>
+                
+                <div class="component-card">
+                    <div class="component-img">
+                        <i class="fas fa-dice"></i>
+                    </div>
+                    <div class="component-info">
+                        <h3>Dados e Peões</h3>
+                        <p>2 dados de 6 faces, 4 peões de cores diferentes e 1 peão especial para marcar desafios ativos.</p>
+                    </div>
+                </div>
+                
+                <div class="component-card">
+                    <div class="component-img">
+                        <i class="fas fa-layer-group"></i>
+                    </div>
+                    <div class="component-info">
+                        <h3>Cartas de Desafio</h3>
+                        <p>120 cartas divididas em 3 categorias: Desafio Investigativo, Laboratório Matemático e Evento Especial.</p>
+                    </div>
+                </div>
+                
+                <div class="component-card">
+                    <div class="component-img">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </div>
+                    <div class="component-info">
+                        <h3>Recursos e Moedas</h3>
+                        <p>Moedas de "Matemoney" em diferentes valores, cartas de propriedade e marcadores de construção.</p>
+                    </div>
+                </div>
+                
+                <div class="component-card">
+                    <div class="component-img">
+                        <i class="fas fa-ruler-combined"></i>
+                    </div>
+                    <div class="component-info">
+                        <h3>Materiais de Apoio</h3>
+                        <p>Réguas, gabaritos, tabelas em branco e folhas de rascunho para anotações e cálculos.</p>
+                    </div>
+                </div>
+                
+                <div class="component-card">
+                    <div class="component-img">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <div class="component-info">
+                        <h3>Manual do Professor</h3>
+                        <p>Guia completo com regras, sugestões de aplicação em sala de aula e articulação com a BNCC.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Download -->
+    <section id="download">
+        <div class="container">
+            <div class="section-title">
+                <h2>Download</h2>
+            </div>
+            
+            <div class="download-options">
+                <div class="download-card">
+                    <div class="download-icon">
+                        <i class="fas fa-file-pdf"></i>
+                    </div>
+                    <h3>Manual Completo</h3>
+                    <p>Regras do jogo, componentes e orientações para aplicação em sala de aula.</p>
+                    <a href="#" class="download-btn">Baixar PDF</a>
+                </div>
+                
+                <div class="download-card">
+                    <div class="download-icon">
+                        <i class="fas fa-print"></i>
+                    </div>
+                    <h3>Componentes para Impressão</h3>
+                    <p>Tabuleiro, cartas, moedas e todos os materiais prontos para impressão.</p>
+                    <a href="#" class="download-btn">Baixar ZIP</a>
+                </div>
+                
+                <div class="download-card">
+                    <div class="download-icon">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                    </div>
+                    <h3>Manual do Professor</h3>
+                    <p>Orientações pedagógicas, articulação com a BNCC e sugestões de avaliação.</p>
+                    <a href="#" class="download-btn">Baixar PDF</a>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 4rem; max-width: 800px; margin-left: auto; margin-right: auto;">
+                <h3 style="color: var(--primary-color); margin-bottom: 1rem;">Como utilizar o MATEMONÓPOLIO em sala de aula</h3>
+                <p>O jogo foi desenvolvido para ser flexível e adaptável a diferentes contextos educacionais. Pode ser usado como:</p>
+                <ul style="display: inline-block; text-align: left; margin-top: 1rem; padding-left: 20px;">
+                    <li>Atividade de introdução a novos conceitos matemáticos</li>
+                    <li>Recurso de revisão e fixação de conteúdos</li>
+                    <li>Projeto interdisciplinar envolvendo Matemática e outras áreas</li>
+                    <li>Atividade extraclasse ou em feiras de ciências</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contato -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <div class="section-title">
+                <h2>Contato</h2>
+            </div>
+            
+            <div class="contact-content">
+                <div class="contact-info">
+                    <h3>Entre em Contato</h3>
+                    <p>Este projeto foi desenvolvido como Trabalho de Conclusão de Curso em Licenciatura em Matemática. Para mais informações, sugestões ou colaborações, entre em contato.</p>
+                    
+                    <div class="contact-item">
+                        <i class="fas fa-user-graduate"></i>
+                        <div>
+                            <h4>Autor do Projeto</h4>
+                            <p>Licenciando em Matemática</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <i class="fas fa-university"></i>
+                        <div>
+                            <h4>Instituição</h4>
+                            <p>Universidade [Nome da Universidade]</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <div>
+                            <h4>E-mail</h4>
+                            <p>contato@matemonopolio.com</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="contact-form">
+                    <h3>Envie uma Mensagem</h3>
+                    <form id="contactForm">
+                        <div class="form-group">
+                            <label for="name">Nome</label>
+                            <input type="text" id="name" class="form-control" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">E-mail</label>
+                            <input type="email" id="email" class="form-control" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="subject">Assunto</label>
+                            <input type="text" id="subject" class="form-control" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="message">Mensagem</label>
+                            <textarea id="message" class="form-control" required></textarea>
+                        </div>
+                        
+                        <button type="submit" class="submit-btn">Enviar Mensagem</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Rodapé -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>MATEMONÓPOLIO</h3>
+                    <p>Jogo educacional desenvolvido para promover a investigação matemática no Ensino Médio, alinhado à Competência 5 da BNCC.</p>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Links Rápidos</h3>
+                    <ul class="footer-links">
+                        <li><a href="#home">Início</a></li>
+                        <li><a href="#about">Sobre o Jogo</a></li>
+                        <li><a href="#competence">Competência 5</a></li>
+                        <li><a href="#components">Componentes</a></li>
+                        <li><a href="#download">Download</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Recursos para Professores</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Plano de Aula</a></li>
+                        <li><a href="#">Atividades Complementares</a></li>
+                        <li><a href="#">Avaliação por Competências</a></li>
+                        <li><a href="#">BNCC Matemática - EM</a></li>
+                        <li><a href="#">Pesquisa em Educação Matemática</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2023 MATEMONÓPOLIO - Gamificação e Investigação Matemática. Desenvolvido como TCC em Licenciatura em Matemática.</p>
+                <p>Este projeto é de caráter educacional e não possui fins comerciais.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Menu responsivo
+        document.getElementById('mobileMenuBtn').addEventListener('click', function() {
+            const nav = document.getElementById('mainNav');
+            nav.classList.toggle('active');
+            
+            // Alternar ícone do botão
+            const icon = this.querySelector('i');
+            if (icon.classList.contains('fa-bars')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            } else {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        });
+        
+        // Fechar menu ao clicar em um link (para dispositivos móveis)
+        document.querySelectorAll('#mainNav a').forEach(link => {
+            link.addEventListener('click', function() {
+                const nav = document.getElementById('mainNav');
+                if (nav.classList.contains('active')) {
+                    nav.classList.remove('active');
+                    const icon = document.querySelector('#mobileMenuBtn i');
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                }
+            });
+        });
+        
+        // Formulário de contato
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Simulação de envio do formulário
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            
+            alert(`Obrigado, ${name}! Sua mensagem foi recebida. Em breve entraremos em contato através do e-mail: ${email}`);
+            
+            // Limpar formulário
+            this.reset();
+        });
+        
+        // Scroll suave para âncoras
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
